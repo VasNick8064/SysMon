@@ -1,6 +1,3 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-#![allow(rustdoc::missing_crate_level_docs)]
-
 use egui::Color32;
 use eframe::egui;
 use egui::{FontFamily, FontId, RichText, TextStyle};
@@ -99,7 +96,7 @@ fn content(ui: &mut egui::Ui, app: &MyApp) {
 // Каждый кадр обновляем метрики, кроме const_info
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        // Раз в 2 секунду обновляем инфу
+        // Раз в 2 секунды обновляем информацию
         if self.last_update.elapsed().as_secs() >= 2 {
             self.sys.refresh_all();
 
@@ -111,7 +108,7 @@ impl eframe::App for MyApp {
         }
 
         egui::CentralPanel::default().show(ctx, |ui| content(ui, self));
-        // Просим egui редерить интерфейс постоянно (чтобы таймер работал)
+        // Просим egui рендерить интерфейс постоянно (чтобы таймер работал)
         ctx.request_repaint();
     }
 }

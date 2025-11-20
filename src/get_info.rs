@@ -16,7 +16,7 @@ pub struct GPUInfo {
 pub fn display_gpu_info() -> String {
     match get_gpu_info() {
         Ok(info) => format!(
-            "=== GPU Information ===\nName: {}\nTemperature: {}\nUsage: {}\nMemory Used: {}\nMemory Total: {}\n",
+            "Name: {}\nTemperature: {}\nUsage: {}\nMemory Used: {}\nMemory Total: {}\n",
             info.name, info.temperature, info.utilization, info.memory_used, info.memory_total
         ),
         Err(e) => format!("Error: {}", e),
@@ -202,7 +202,7 @@ pub fn get_const_info() -> String {
 
 pub fn get_cpu_info(sys: &System) -> String {
     format!(
-        "=== CPU Information ===\nName: {}\nUsage: {:.1} %\n",
+        "Name: {}\nUsage: {:.1} %\n",
         sys.cpus()[0].brand(),
         sys.global_cpu_usage()
     )
