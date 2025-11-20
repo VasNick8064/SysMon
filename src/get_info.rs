@@ -13,21 +13,16 @@ pub struct GPUInfo {
 
 
 // Ф-я вывода инф о GPU    
-pub fn display_gpu_info() {
+pub fn display_gpu_info() -> String {
     match get_gpu_info() {
-        Ok(info) => {
-            println!("=== GPU Information ===");
-            println!("Name: {}", info.name);
-            println!("Temperature: {}", info.temperature);
-            println!("Usage: {}", info.utilization);
-            println!("Memory Used: {}", info.memory_used);
-            println!("Memory Total: {}", info.memory_total);
-        }
-        Err(e) => {
-            println!("Error: {}", e);
-        }
+        Ok(info) => format!(
+            "=== GPU Information ===\nName: {}\nTemperature: {}\nUsage: {}\nMemory Used: {}\nMemory Total: {}\n",
+            info.name, info.temperature, info.utilization, info.memory_used, info.memory_total
+        ),
+        Err(e) => format!("Error: {}", e),
     }
 }
+
 
 // Вспомогательная функция для получения инфо (приватная)
 fn get_gpu_info() -> Result<GPUInfo, Box<dyn std::error::Error>> {
@@ -163,12 +158,13 @@ fn try_wmi() -> Result<GPUInfo, Box<dyn std::error::Error>> {
 // Ф-я вывода инф о диске    
 
 
-pub fn get_disk_info(sys: &System) {    
-    
-    println!("RAM usage: {:.1} %", (sys.used_memory() as f64 / sys.total_memory() as f64) * 100.0);
-    
-    let disks = Disks::new_with_refreshed_list();
+pub fn get_disk_info(sys: &System) -> String {
+    let mut info = format!(
+        "RAM usage: {:.1} %\n",
+        (sys.used_memory() as f64 / sys.total_memory() as f64) * 100.0
+    );
 
+    let disks = Disks::new_with_refreshed_list();
     for disk in disks.list() {
         let total = disk.total_space() as f64;
         let available = disk.available_space() as f64;
@@ -176,13 +172,12 @@ pub fn get_disk_info(sys: &System) {
         let used_percent = (used / total) * 100.0;
         let mount_point = disk.mount_point().to_string_lossy();
 
-        println!(
-            "{} usage: {:.1} %",
-            mount_point,
-            used_percent,
-        );
-        println!();
+        info.push_str(&format!(
+            "{} usage: {:.1} %\n",
+            mount_point, used_percent
+        ));
     }
+    info
 }
 
 
@@ -190,25 +185,28 @@ pub fn get_disk_info(sys: &System) {
 // Ф-я вывода инф о GPU    
 
 
-pub fn get_const_info() {
-
-    println!("User: {}", username());
-    println!("PC: {}", devicename());
-    println!("OS: {}", distro());
-    println!();
+pub fn get_const_info() -> String {
+    format!(
+        "User: {}\nPC: {}\nOS: {}\n",
+        username(),
+        devicename(),
+        distro()
+    )
 }
+
 
 
 //########################################################################
 // Ф-я вывода инф о CPU   
 
 
-pub fn get_cpu_info(sys: &System) {
-    
-    println!("=== СPU Information ===");
-    println!("Name: {}", sys.cpus()[0].brand());
-    println!("Usage: {:.1} %", sys.global_cpu_usage());
-    println!();
+pub fn get_cpu_info(sys: &System) -> String {
+    format!(
+        "=== CPU Information ===\nName: {}\nUsage: {:.1} %\n",
+        sys.cpus()[0].brand(),
+        sys.global_cpu_usage()
+    )
 }
+
 
 
